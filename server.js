@@ -1,6 +1,8 @@
 const express = require("express");
 const morgan = require("morgan");
 require("dotenv").config();
+const ApiError = require("./utils/ApiError");
+const globalError = require("./middlewares/errorMiddleware");
 const { dbConnection } = require("./config/dbConfig");
 const categoryRoute = require("./routes/categoryRoute");
 
@@ -11,8 +13,6 @@ dbConnection();
 const app = express();
 
 // Middlewares
-
-// parse express.json
 app.use(express.json());
 
 if (process.env.NODE_ENV == "development") {
@@ -25,17 +25,24 @@ app.use("/api/v1/categories", categoryRoute);
 // Unhandled routes
 app.all("*", (req, res, next) => {
   // create error and send it to error handling middleware
-  const err = new Error(`Can't find ${req.originalUrl}`);
-  next(err.message);
+  next(new ApiError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-// Global error handling middleware
-app.use((err, req, res, next) => {
-  res.status(500).json({ err });
-});
+// Global error handling middleware for express app
+app.use(globalError);
 
-app.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT, () => {
   console.log(
     `server started listening on http://localhost:${process.env.PORT}`
   );
+});
+
+// Handle rejections outside of the express app
+process.on("unhandledRejection", (err) => {
+  console.error(`Error: ${err.message}`);
+
+  server.close(() => {
+    console.log(`Server closed!`);
+    process.exit(1); // 1 denotes an err
+  });
 });
