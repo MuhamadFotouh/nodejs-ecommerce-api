@@ -1,10 +1,13 @@
 const express = require("express");
 const morgan = require("morgan");
 require("dotenv").config();
-const ApiError = require("./utils/ApiError");
+const ApiError = require("./utils/apiError");
 const globalError = require("./middlewares/errorMiddleware");
 const { dbConnection } = require("./config/dbConfig");
-const categoryRoute = require("./routes/categoryRoute");
+// Routes
+const categoryRoute = require("./routes/category.route");
+const subCategoryRoute = require("./routes/subCategory.route");
+const brandRoute = require("./routes/brand.route");
 
 // DB Connection
 dbConnection();
@@ -15,12 +18,14 @@ const app = express();
 // Middlewares
 app.use(express.json());
 
-if (process.env.NODE_ENV == "development") {
+if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
 // Routes
 app.use("/api/v1/categories", categoryRoute);
+app.use("/api/v1/subcategories", subCategoryRoute);
+app.use("/api/v1/brands", brandRoute);
 
 // Unhandled routes
 app.all("*", (req, res, next) => {

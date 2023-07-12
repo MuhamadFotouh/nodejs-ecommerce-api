@@ -1,19 +1,23 @@
 const express = require("express");
-const { param } = require("express-validator");
+
 const {
-  getCategoryValidator,
   createCategoryValidator,
+  getCategoryValidator,
   updateCategoryValidator,
   deleteCategoryValidator,
-} = require("../utils/validators/categoryValidator");
+} = require("../utils/validators/category.validator");
 const {
-  getAllCategories,
   createCategory,
+  getAllCategories,
   getCategory,
   updateCategory,
   deleteCategory,
-} = require("../controllers/categoryController");
+} = require("../controllers/category.controller");
+const subCategoryRoute = require("./subCategory.route");
+
 const router = express.Router();
+
+router.use("/:categoryId/subcategories", subCategoryRoute);
 
 router
   .route("/")
