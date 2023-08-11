@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
-const ApiError = require("../utils/apiError");
+const ApiError = require("../utils/ApiError");
 const SubCategory = require("../models/subCategory.model");
 
 // Nested route

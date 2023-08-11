@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
-const ApiError = require("../utils/apiError");
+const ApiError = require("../utils/ApiError");
 const Brand = require("../models/brand.model");
 
 // @desc Create a brand

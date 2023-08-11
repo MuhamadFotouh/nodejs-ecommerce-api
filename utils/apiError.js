@@ -1,4 +1,4 @@
-// @desc operation errors class (predectable errors)
+// @desc operation errors class (predictable errors)
 class ApiError extends Error {
   constructor(message, statusCode) {
     super(message);

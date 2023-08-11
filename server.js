@@ -1,13 +1,14 @@
 const express = require("express");
 const morgan = require("morgan");
 require("dotenv").config();
-const ApiError = require("./utils/apiError");
+const ApiError = require("./utils/ApiError");
 const globalError = require("./middlewares/errorMiddleware");
 const { dbConnection } = require("./config/dbConfig");
 // Routes
 const categoryRoute = require("./routes/category.route");
 const subCategoryRoute = require("./routes/subCategory.route");
 const brandRoute = require("./routes/brand.route");
+const productRoute = require("./routes/product.route");
 
 // DB Connection
 dbConnection();
@@ -26,6 +27,7 @@ if (process.env.NODE_ENV === "development") {
 app.use("/api/v1/categories", categoryRoute);
 app.use("/api/v1/subcategories", subCategoryRoute);
 app.use("/api/v1/brands", brandRoute);
+app.use("/api/v1/products", productRoute);
 
 // Unhandled routes
 app.all("*", (req, res, next) => {
